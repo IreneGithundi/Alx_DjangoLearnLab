@@ -1,1 +1,1 @@
-This is the ALX Library Project
+Library Project
