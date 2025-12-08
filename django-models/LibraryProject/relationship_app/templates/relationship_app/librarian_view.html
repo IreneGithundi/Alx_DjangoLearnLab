@@ -1,0 +1,12 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Librarian Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, Librarian!</h1>
+    <p>You have access to the {{ role }} area. You can manage books and members.</p>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>
