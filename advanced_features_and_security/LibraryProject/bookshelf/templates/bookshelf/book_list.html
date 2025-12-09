@@ -1,0 +1,54 @@
+{% load static %}
+<!-- book_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+</head>
+<body>
+    <h1>Book List</h1>
+    
+    <!-- Link to create new book (if user has permission) -->
+    {% if perms.bookshelf.can_create %}
+        <a href="{% url 'book_create' %}">Add New Book</a>
+    {% endif %}
+    
+    <!-- 
+    SECURITY: Output Escaping
+    Django automatically escapes variables to prevent XSS attacks
+    {{ book.title }} is automatically escaped
+    -->
+    <ul>
+    {% for book in books %}
+        <li>
+            <!-- All output is automatically HTML-escaped by Django -->
+            <strong>{{ book.title }}</strong> by {{ book.author }} ({{ book.publication_year }})
+            
+            <!-- Only show edit/delete links if user has permissions -->
+            {% if perms.bookshelf.can_edit %}
+                <a href="{% url 'book_edit' book.pk %}">Edit</a>
+            {% endif %}
+            
+            {% if perms.bookshelf.can_delete %}
+                <a href="{% url 'book_delete' book.pk %}">Delete</a>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No books available.</li>
+    {% endfor %}
+    </ul>
+    
+    <!-- Example: Search form with CSRF protection -->
+    <h2>Search Books</h2>
+    <form method="get" action="{% url 'book_list' %}">
+        <!-- 
+        SECURITY NOTE: GET requests don't need CSRF tokens
+        Only POST, PUT, PATCH, DELETE requests require CSRF tokens
+        -->
+        <input type="text" name="search" placeholder="Search books..." value="{{ request.GET.search }}">
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>

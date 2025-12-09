@@ -1,0 +1,39 @@
+{% load static %}
+<!-- form_example.html - Generic form example with security best practices -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Form Example</title>
+</head>
+<body>
+    <h1>Secure Form Example</h1>
+    
+    <!-- 
+    SECURITY BEST PRACTICES FOR FORMS:
+    1. Always use {% csrf_token %} for POST forms
+    2. Use method="post" for data modification operations
+    3. Let Django's form system handle input validation and escaping
+    4. Never use |safe filter on user input
+    -->
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Display form errors if any -->
+        {% if form.errors %}
+            <div class="errors">
+                <strong>Please correct the following errors:</strong>
+                {{ form.errors }}
+            </div>
+        {% endif %}
+        
+        <!-- Render form fields - Django automatically escapes output -->
+        {{ form.as_p }}
+        
+        <button type="submit">Submit</button>
+    </form>
+    <div>User input is safely displayed: {{ user_input }}</div>
+</body>
+</html>
