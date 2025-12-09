@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Book_Form</title>
+</head>
+<body>
+    <h1>{{ action }} Book</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'list_books' %}">Cancel</a>
+</body>
+</html> 
