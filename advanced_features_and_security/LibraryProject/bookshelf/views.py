@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseForbidden
 from django.db.models import Q
 from .models import Book
-from .forms import BookForm, ExampleForm  # Import your forms
+from .forms import BookForm
+from .forms import ExampleForm  
 
 # ============================================================================
 # SECURITY BEST PRACTICES IN VIEWS
