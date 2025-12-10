@@ -41,7 +41,7 @@ CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Strict'  # Options: 'Strict', 'Lax', or 'None'
 SESSION_COOKIE_SAMESITE = 'Strict'
-
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 

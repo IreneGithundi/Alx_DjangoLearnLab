@@ -20,7 +20,7 @@ class Book(models.Model):
             ("can_change_book", "Can change an existing book entry"),
             ("can_delete_book", "Can delete a book entry"),
         ]
-    #string representation
+        
     def __str__(self):
         return (f"{self.title}, {self.author},")
     
