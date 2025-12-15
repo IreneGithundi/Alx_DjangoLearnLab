@@ -88,7 +88,8 @@ class BookAPITestCase(APITestCase):
     
     def test_create_book_authenticated(self):
         """Test a logged-in user can successfully create a book."""
-        self.client.force_authenticate(user=self.user)
+        login_successful = self.client.login(username='testuser', password='password123')
+        self.assertTrue(login_successful)
         
         new_book_data = {
             'title': 'New Test Book',
