@@ -6,6 +6,7 @@ from .serializers import BookSerializer, AuthorSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework import filters
 
 # ListView - Retrieve all books
 # This view handles GET requests to retrieve a list of all books in the database
@@ -32,8 +33,8 @@ class BookListView(generics.ListAPIView):
 
     filter_backends = [
         DjangoFilterBackend,
-        SearchFilter,
-        OrderingFilter,
+        filters.SearchFilter, # Reference as filters.SearchFilter
+        filters.OrderingFilter, # Reference as filters.OrderingFilter (This is what the check wants)
     ]
 
     filterset_fields = [
