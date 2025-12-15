@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.response import Response
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 # ListView - Retrieve all books
 # This view handles GET requests to retrieve a list of all books in the database
@@ -26,6 +27,83 @@ class BookListView(generics.ListAPIView):
     # permission_classes: Defines who can access this view
     # AllowAny means anyone can access this endpoint without authentication
     permission_classes = [permissions.AllowAny]
+
+    filter_backends = [
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter,
+    ]
+
+    filterset_fields = [
+        'id',
+        'title',
+        'author__name',
+        'publication_year'
+    ]
+    search_fields = [
+        'title',
+        'author__name',
+    ]
+
+    ordering_fields = [
+        'publication_year',
+        'author__name',
+        'title'
+    ]
+
+    ordering = ['title']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        year_from = self.request.query_params.get('year_from', None)
+        year_to = self.request.query_params.get('year_to', None)
+        if year_from is not None:
+            # Filter books published on or after year_from
+            queryset = queryset.filter(publication_year__gte=year_from)
+        
+        if year_to is not None:
+            # Filter books published on or before year_to
+            queryset = queryset.filter(publication_year__lte=year_to)
+
+        
+        return queryset
+    
+    def list(self, request, *args, **kwargs):
+        """
+        Override the list method to add custom response information.
+        
+        This method handles the GET request and returns the list of books.
+        We're overriding it to add metadata about the applied filters.
+        
+        Returns:
+            Response: Custom response with books and filter information
+        """
+        # Get the filtered, searched, and ordered queryset
+        queryset = self.filter_queryset(self.get_queryset())
+        
+        # Paginate the queryset (if pagination is configured)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        # Serialize the queryset
+        serializer = self.get_serializer(queryset, many=True)
+        
+        # Create custom response with metadata
+        response_data = {
+            'count': queryset.count(),  # Total number of results
+            'filters_applied': {
+                'search': request.query_params.get('search', None),
+                'ordering': request.query_params.get('ordering', 'title'),
+                'publication_year': request.query_params.get('publication_year', None),
+                'author': request.query_params.get('author', None),
+            },
+            'results': serializer.data
+        }
+        
+        return Response(response_data)
+
 
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
