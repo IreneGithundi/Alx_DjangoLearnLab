@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 # ListView - Retrieve all books
 # This view handles GET requests to retrieve a list of all books in the database
