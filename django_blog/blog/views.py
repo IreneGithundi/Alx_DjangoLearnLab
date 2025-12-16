@@ -18,7 +18,7 @@ def register(request):
             return redirect('home')  # Redirect to home page after registration
     else:
         form = CustomUserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'registration\register.html', {'form': form})
 
 #profile view:
 @login_required
@@ -31,7 +31,7 @@ def profile(request):
             u_form.save()
             p_form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('profile')
+            return redirect('registration\profile')
         else:
             u_form = UserUpdateForm(instance=request.user)
             p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -41,4 +41,4 @@ def profile(request):
         'p_form': ProfileUpdateForm(instance=request.user.profile)'
     }
 
-    return render(request, 'profile.html', context)
+    return render(request, 'registration\profile.html', context)
