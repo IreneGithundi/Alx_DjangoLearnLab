@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Logged Out{% endblock %}
+
+{% block content %}
+<div class="message-container">
+    <h2>You have been logged out!</h2>
+    <p>Thank you for visiting.</p>
+    <p>
+        <a href="{% url 'login' %}">Click here to log in again.</a>
+    </p>
+    <p>
+        <a href="{% url 'register' %}">Create a new account.</a>
+    </p>
+</div>
+{% endblock %}

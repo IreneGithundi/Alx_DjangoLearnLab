@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Welcome, {{ user.username }}!</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <h3>Your Details</h3>
+    <table class="profile-table">
+        <tr>
+            <th>Username:</th>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Date Joined:</th>
+            <td>{{ user.date_joined|date:"F j, Y" }}</td>
+        </tr>
+        {% if user.profile %}
+        <tr>
+            <th>Bio:</th>
+            <td>{{ user.profile.bio|default:"No bio set." }}</td>
+        </tr>
+        {% endif %}
+    </table>
+    
+    <div class="profile-actions">
+        <a href="{% url 'password_change' %}" class="btn-secondary">Change Password</a>
+        <a href="{% url 'logout' %}" class="btn-danger">Log Out</a>
+    </div>
+
+</div>
+{% endblock %}
